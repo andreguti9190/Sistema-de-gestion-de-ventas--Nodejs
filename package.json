@@ -1,0 +1,16 @@
+{
+  "name": "sistema-de-gestion-de-ventas",
+  "version": "1.0.0",
+  "description": "Sistema de gestion de ventas",
+  "license": "ISC",
+  "author": "André Gutiérrez",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "mysql2": "^3.17.3"
+  }
+}
