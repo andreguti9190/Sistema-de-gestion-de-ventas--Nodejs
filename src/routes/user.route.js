@@ -1,18 +1,19 @@
 import { Router } from "express"
+import getUsers from "../controller/users/getUsers.js";
+import getUser from "../controller/users/getUser.js";
+import createUser from "../controller/users/createUser.js";
+import updateUser from "../controller/users/updateUser.js";
+import deleteUser from "../controller/users/deleteUser.js";
 const routes = Router();
 
 routes.route("/users")
-    .get((req,res)=>{
-        res.send("get user")
-    })
-    .post((req,res) => {
-        res.send("create user")
-    })
-    .put((req,res) => {
-        res.send("update user")
-    })
-    .delete((req,res) => {
-        res.send("delete user")
-    })
+    .get(getUsers)
+    .post(createUser)
+
+routes.route("/users/:id")
+    .get(getUser)
+    .patch(updateUser)
+    .delete(deleteUser)
+
 
 export default routes;
