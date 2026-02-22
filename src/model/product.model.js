@@ -13,7 +13,7 @@ export function getProduct(id) {
         id
     ).then((row) => {
         if (row[0].length === 0) return { error: true, msg: "Product no exits" }
-        else return { error: false, msg: "Product got sucessfully", user: row[0][0] }
+        else return { error: false, msg: "Product got sucessfully", product: row[0][0] }
     }).catch((err) => { return { error: true, msg: "Query of getProduct fail" } })
 }
 
@@ -21,7 +21,9 @@ export function createProduct(name, description, price, stock, categoryId) {
     return getUUID()
         .then(({ UUID }) => {
             return pool.query(
-                "INSERT INTO products (id,name,description,price,stock,category_id) VALUES (UUID_TO_BIN(?),?,?,?,?,?)",
+                `INSERT INTO products 
+                (id,name,description,price,stock,category_id) 
+                VALUES (UUID_TO_BIN(?),?,?,?,?,?)`,
                 [UUID, name, description, price, stock, categoryId]
             )
         }).then(() => {
