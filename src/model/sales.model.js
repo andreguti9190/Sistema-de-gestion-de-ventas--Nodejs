@@ -44,6 +44,37 @@ export const getSale = async (id) => {
     return { error: false, data: result }
 }
 
+export const deleteSales = async (salesId) => {
+    const conn = await pool.getConnection();
+    try {
+        await conn.beginTransaction();
+        await conn.query(
+            `DELETE FROM sale_details WHERE sale_id = UUID_TO_BIN(?)`,
+            [salesId]
+        )
+        await conn.query(
+            `DELETE FROM sales WHERE id=UUID_TO_BIN(?)`,
+            [salesId]
+        )
+        await conn.commit();
+        return { error: false, msg: "sales was deleted sucessfully" }
+    } catch (err) {
+        conn.rollback();
+        return { error: true, msg: "consulta fallo" }
+    }
+}
+
+export const updateSales = async (idSaleDetails, idProduct, quantity) => {
+    return pool.query(
+        `UPDATE sale_details SET
+        product_id= IFNULL(UUID_TO_BIN(?),product_id) ,
+        quantity = IFNULL(?,quantity) 
+        WHERE id=UUID_TO_BIN(?)`,
+        [idProduct, quantity, idSaleDetails]
+    ).then((row) => {
+        return { error: false, msg: "update was sucessfully" }
+    }).catch((err) => { return { error: true, msg: "Query of updateproducts fail" } })
+}
 
 export const createSales = async (userId, ordenDetails) => {
     const conn = await pool.getConnection();
