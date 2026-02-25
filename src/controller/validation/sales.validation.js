@@ -11,6 +11,11 @@ const schemmaOrden = z.object({
     ordenDetails: schemmaOrdenDetails
 })
 
+export const validateUUID = async (id) => {
+    const result = await schemmaUserId.safeParseAsync(id)
+    return result.success
+}
+
 export const validateSales = async (userId, ordenDetails) => {
     const valid = await schemmaOrden.safeParseAsync({
         userId:userId,
