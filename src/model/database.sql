@@ -8,8 +8,6 @@ CREATE TABLE roles (
 );
 
 INSERT INTO roles (name) VALUES ('admin'), ('employee');
-
-
 -- Usuario 
 CREATE TABLE users (
     id BINARY(16) PRIMARY KEY,
@@ -22,9 +20,6 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
-
-
-
 
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -49,7 +44,6 @@ CREATE TABLE products (
 CREATE TABLE sales (
     id BINARY(16) PRIMARY KEY,
     user_id BINARY(16) NOT NULL,
-    total DECIMAL(12,2) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -60,7 +54,6 @@ CREATE TABLE sale_details (
     sale_id BINARY(16) NOT NULL,
     product_id BINARY(16) NOT NULL,
     quantity INT NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
 
     FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id)
