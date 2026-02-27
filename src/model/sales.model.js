@@ -1,6 +1,5 @@
 import crypto from "node:crypto"
 import { pool } from "./pool.js"
-import { error } from "node:console"
 
 export const getSales = async () => {
     try {
@@ -65,15 +64,45 @@ export const deleteSales = async (salesId) => {
 }
 
 export const updateSales = async (idSaleDetails, idProduct, quantity) => {
-    return pool.query(
-        `UPDATE sale_details SET
-        product_id= IFNULL(UUID_TO_BIN(?),product_id) ,
-        quantity = IFNULL(?,quantity) 
-        WHERE id=UUID_TO_BIN(?)`,
-        [idProduct, quantity, idSaleDetails]
-    ).then((row) => {
+    const conn = await pool.getConnection()
+
+    try {
+        let pass = false
+        await conn.beginTransaction()
+        const dataProduct = (await conn.query(
+            `SELECT BIN_TO_UUID(id) as id, stock FROM products
+            WHERE id = UUID_TO_BIN(?)`,
+            [idProduct]
+        ))[0]
+        const dataSaleDetails = (await conn.query(
+            `SELECT  quantity FROM sale_details
+            WHERE id = UUID_TO_BIN(?)`,
+            [idSaleDetails]
+        ))[0]
+        if (dataProduct.length == 0) throw new Error("No existe ese product");
+        if (dataSaleDetails.length == 0) throw new Error("No existe ese idSales");
+        const stockFree = dataProduct[0].stock + dataSaleDetails[0].quantity
+        if(stockFree<quantity) throw new Error("No se puede ingrear es cantidad");
+        console.log(dataProduct[0])
+        console.log(dataSaleDetails[0])
+        await conn.query(
+            `UPDATE products SET 
+            stock = stock - ?`
+            ,[quantity - dataSaleDetails[0].quantity]
+        )
+        await conn.query(
+            `UPDATE sale_details SET
+            product_id= IFNULL(UUID_TO_BIN(?),product_id) ,
+            quantity = IFNULL(?,quantity) 
+            WHERE id=UUID_TO_BIN(?)`,
+            [idProduct, quantity, idSaleDetails])
+            ;
+        await conn.commit();
         return { error: false, msg: "update was sucessfully" }
-    }).catch((err) => { return { error: true, msg: "Query of updateproducts fail" } })
+    } catch (err) {
+        await conn.rollback();
+        return { error: true, msg: "Query of updateproducts fail" }
+    }
 }
 
 export const createSales = async (userId, ordenDetails) => {
