@@ -201,6 +201,203 @@ Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la 
   "msg": "Client deleted successfully"
 }
 ```
+### Método POST `/sales`
+Este enpoint se encarga de crear una orden de compra donde se ingresa los productos comprados y se disminuira en el stock, en caso de pedir mas que el stock mandara error
+```json
+{ 
+  "clientId":"036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+  "ordenDetails":[{
+    "productId":"1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+    "quantity": 10
+    }] 
+}
+```
+`/products/1373fe00-14e4-11f1-9fcd-2418c6c96a00`
+```json
+// Antes
+{
+  "error": false,
+  "msg": "Product got sucessfully",
+  "product": {
+    "id": "b6da7bbc-14b9-11f1-9fcd-2418c6c96a00",
+    "name": "Coca cola",
+    "description": "Bebida gasificada de 2ltr",
+    "price": "3000.00",
+    "stock": 40,
+    "category_id": 1,
+    "created_at": "2026-02-28T15:25:29.000Z",
+    "updated_at": "2026-02-28T15:25:29.000Z"
+  }
+}
+```
+```json
+// Despues
+{
+  "error": false,
+  "msg": "Product got sucessfully",
+  "product": {
+    "id": "1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+    "name": "Coca cola",
+    "description": "Bebida gasificada de 2ltr",
+    "price": "3000.00",
+    "stock": 30,
+    "category_id": 1,
+    "created_at": "2026-02-28T20:28:43.000Z",
+    "updated_at": "2026-02-28T20:31:28.000Z"
+  }
+}
+```
+### Método GET `/sales`
+Este endopoint se encarga de conseguir una lista de clientes o un cliente en concreto con toda su información dependiendo su url
+#### Caso `/sales/:id`
+En este vas a conseguirla orden de compra con todos los productos pasando el id en la url
+```json
+{
+  "error": false,
+  "data": [
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "1b71fff6-ca67-424d-a391-f14b0a63d8ec",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1eeeaded-14e6-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Ptusas",
+      "quantity": 30,
+      "price": "1200.00",
+      "total": "36000.00"
+    },
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "bc7ff6f2-d092-46fa-a893-71c860c2a69d",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "2cfba483-14e6-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Pepsi",
+      "quantity": 50,
+      "price": "5000.00",
+      "total": "250000.00"
+    }
+  ]
+}
+```
+
+#### Caso `/sales`
+En este caso va a pasar todos los detalles de la ordenes de compra 
+```json
+{
+  "error": false,
+  "data": [
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "1b71fff6-ca67-424d-a391-f14b0a63d8ec",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1eeeaded-14e6-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Ptusas",
+      "quantity": 30,
+      "price": "1200.00",
+      "total": "36000.00"
+    },
+    {
+      "idSales": "878d89a7-a1a1-4411-a359-1ad08965fb30",
+      "idSalesDetails": "4033e9a1-5858-44c9-b1d7-39c718933372",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Coca cola",
+      "quantity": 10,
+      "price": "3000.00",
+      "total": "30000.00"
+    },
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "bc7ff6f2-d092-46fa-a893-71c860c2a69d",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "2cfba483-14e6-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Pepsi",
+      "quantity": 50,
+      "price": "5000.00",
+      "total": "250000.00"
+    }
+  ]
+}
+```
+### Método PATCH `/sales/:id`
+Este endpoint se encarga de acutalizar la orden pasando el id del detalle de la compra y los parametros que va a actualizar
+```json
+{
+  // opcionales son los campos
+    "productId":"1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+    "quantity":20
+}
+```
+### Método DELETE `/sales/:id`
+Este endopint se encarga de eliminar la orden de compra pasando el id de la orden
+
+- Ruta ejecutada `/sales/4e42fc03-edf3-4212-afb5-47e9ae8400a4
+ DELETE`
+- Resultados de `/sales GET`
+```json
+// Antes
+{
+  "error": false,
+  "data": [
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "1b71fff6-ca67-424d-a391-f14b0a63d8ec",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Coca cola",
+      "quantity": 20,
+      "price": "3000.00",
+      "total": "60000.00"
+    },
+    {
+      "idSales": "878d89a7-a1a1-4411-a359-1ad08965fb30",
+      "idSalesDetails": "4033e9a1-5858-44c9-b1d7-39c718933372",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Coca cola",
+      "quantity": 10,
+      "price": "3000.00",
+      "total": "30000.00"
+    },
+    {
+      "idSales": "4e42fc03-edf3-4212-afb5-47e9ae8400a4",
+      "idSalesDetails": "bc7ff6f2-d092-46fa-a893-71c860c2a69d",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "2cfba483-14e6-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Pepsi",
+      "quantity": 50,
+      "price": "5000.00",
+      "total": "250000.00"
+    }
+  ]
+}
+```
+```json
+// Despues
+{
+  "error": false,
+  "data": [
+    {
+      "idSales": "878d89a7-a1a1-4411-a359-1ad08965fb30",
+      "idSalesDetails": "4033e9a1-5858-44c9-b1d7-39c718933372",
+      "clientsId": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "clientsName": "Mark Zuckemberg",
+      "idProduct": "1373fe00-14e4-11f1-9fcd-2418c6c96a00",
+      "nameProduct": "Coca cola",
+      "quantity": 10,
+      "price": "3000.00",
+      "total": "30000.00"
+    }
+  ]
+}
+```
 >[!CAUTION]
 > ```json
 > // Respuesta erronea

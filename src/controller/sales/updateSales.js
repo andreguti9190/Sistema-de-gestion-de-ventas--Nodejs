@@ -10,11 +10,11 @@ const updateSalesController = async (req, res) => {
     if (!validUUID) return res.status(400).json({ error: true, msg: "the id is invalid" })
 
     if (isEmpty(req.body)) return res.status(400).json({ error: true, msg: "request body is empty" })
-    const { idSaleDetails, saleDetails } = req.body
-    const validSales = await validateSalesSoft(idSaleDetails, saleDetails.productId, saleDetails.quantity)
+    const { productId, quantity } = req.body
+    const validSales = await validateSalesSoft(id,productId, quantity)
 
     if (!validSales) return res.status(400).json({ error: true, msg: "the data is invalid" })
-    const data = await updateSales(idSaleDetails, saleDetails.productId, saleDetails.quantity)
+    const data = await updateSales(id,productId, quantity)
 if(data.error) return res.status(400).json(data)
     else return res.status(200).json(data)
 }

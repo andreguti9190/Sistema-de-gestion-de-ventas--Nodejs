@@ -10,7 +10,7 @@ export function getClients() {
 export function getClient(id) {
     return pool.query(
         "SELECT BIN_TO_UUID(id) as id,name,email FROM clients WHERE id = UUID_TO_BIN(?)",
-        id
+        [id]
     ).then((row) => {
         if (row[0].length === 0) return { error: true, msg: "Client no exits" }
         else return { error: false, msg: "Client got sucessfully", user: row[0][0] }
