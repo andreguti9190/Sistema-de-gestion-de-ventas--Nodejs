@@ -7,7 +7,7 @@ CREATE TABLE roles (
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO roles (name) VALUES ('admin'), ('employee');
+INSERT INTO roles (name) VALUES ('admin'), ('clients');
 -- Usuario 
 CREATE TABLE users (
     id BINARY(16) PRIMARY KEY,
@@ -34,7 +34,6 @@ CREATE TABLE products (
     price DECIMAL(10,2) NOT NULL,
     stock INT NOT NULL DEFAULT 0,
     category_id INT,
-    is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -55,6 +54,6 @@ CREATE TABLE sale_details (
     product_id BINARY(16) NOT NULL,
     quantity INT NOT NULL,
 
-    FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE,
+    FOREIGN KEY (sale_id) REFERENCES sales(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
