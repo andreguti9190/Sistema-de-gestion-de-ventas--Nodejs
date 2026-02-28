@@ -3,7 +3,7 @@ import { validateClient } from "../validation/client.validation.js";
 
 const isEmpty = (body) => !body || Object.keys(body).length === 0
 
-const createUserController = async (req, res) => {
+const createClientController = async (req, res) => {
     if (isEmpty(req.body)) return res.status(400).json({ error: true, msg: "request body is empty" })
 
     const { name, email} = req.body
@@ -17,4 +17,4 @@ const createUserController = async (req, res) => {
     res.status(200).json(data)
 }
 
-export default createUserController;
+export default createClientController;

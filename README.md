@@ -119,7 +119,7 @@ En este caso va a pasar una lista de productos
 ]
 ```
 ### Método PATCH `/products/:id`
-Este endpoint se encarga de acutalizar un producto pasando los parametros q va a actualizar
+Este endpoint se encarga de acutalizar un producto pasando los parametros que va a actualizar
 ```json
 /* Contenido del body
  todos los campos son opcionales */
@@ -140,9 +140,67 @@ Este endpoint se encarga de eliminar un producto en concreto pasando el id en la
   "msg": "Product deleted successfully"
 }
 ```
+### Método POST `/clients`
+En este endpoint se encarga de crear los clientes los cuales son los que hacen las ordenes de compra
+```json
+// Contenido del body
+{
+  "name":"Mark Zuckemberg",
+  "email":"markz@facebook.com"
+}
+```
+### Método GET `/clients`
+Este endopoint se encarga de conseguir una lista de clientes o un cliente en concreto con toda su información dependiendo su url
+#### Caso `/clients/:id`
+En este vas a conseguir un solo cliente solamente pasando el id en la url
+```json
+{
+  "error": false,
+  "client": {
+    "id": "49a5ddf8-14ce-11f1-9fcd-2418c6c96a00",
+    "name": "albert Epstein",
+    "email": "albertE@ralatividad.com"
+  }
+}
+```
 
-
-
+#### Caso `/clients`
+En este caso va a pasar una lista de clientes
+```json
+{
+  "error": false,
+  "listClients": [
+    {
+      "id": "036c71c5-14e0-11f1-9fcd-2418c6c96a00",
+      "name": "Mark Zuckemberg",
+      "email": "markz@facebook.com"
+    },
+    {
+      "id": "49a5ddf8-14ce-11f1-9fcd-2418c6c96a00",
+      "name": "albert Epstein",
+      "email": "albertE@ralatividad.com"
+    }
+  ]
+}
+```
+### Método PATCH `/clients/:id`
+Este endpoint se encarga de acutalizar un cliente pasando los parametros que va a actualizar
+```json
+/* Contenido del body
+ todos los campos son opcionales */
+{
+  "name":"Mark Zuckemberg",
+  "email":"markzuck@facebook.com"
+}
+```
+### Método DELETE `/clients/:id`
+Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la url
+```json
+{
+  "error": false,
+  "msg": "Client deleted successfully"
+}
+```
 >[!CAUTION]
 > ```json
 > // Respuesta erronea

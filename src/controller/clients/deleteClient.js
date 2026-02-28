@@ -1,7 +1,7 @@
 import {validateUUID} from "../validation/client.validation.js"
 import { deleteClient } from "../../model/clients.model.js"
 
-const deleteUserController = async (req, res) => {
+const deleteClientController = async (req, res) => {
     const id = req.params.id
     const validUUID = await validateUUID(id)
     if (!validUUID) return res.status(400).json({ error: true, msg: "Id is invalid" })
@@ -10,4 +10,4 @@ const deleteUserController = async (req, res) => {
     return res.status(200).json(data)
 }
 
-export default deleteUserController;
+export default deleteClientController;

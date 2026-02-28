@@ -4,7 +4,7 @@ import { validateUUID, validateClientSoft } from "../validation/client.validatio
 
 const isEmpty = (body) => !body || Object.keys(body).length == 0
 
-const updateUserController = async (req, res) => {
+const updateClientController = async (req, res) => {
     const id = req.params.id
     const validUUID = await validateUUID(id)
     if (!validUUID) return res.status(400).json({ error: true, msg: "Id is invalid" })
@@ -20,4 +20,4 @@ const updateUserController = async (req, res) => {
     return res.status(200).json({ error: true, msg: "User update sucessfully" })
 }
 
-export default updateUserController;
+export default updateClientController;
