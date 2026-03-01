@@ -45,11 +45,17 @@ export function updateClient(id, fields) {
 export function deleteClient(id) {
     if (!id) return { error: true, msg: "the id field is missing" }
     return pool.query(
-        "DELETE FROM clients WHERE id = UUID_TO_BIN(?)",
+        `SELECT BIN_TO_UUID(id) as idSale FROM sales WHERE clients_id = UUID_TO_BIN(?)`,
         [id]
-    ).then((row) => {
+    ).then((value) => {
+        if(value[0].length!=0) throw new Error(JSON.stringify({error:true,msg:"there are sales with this client",saleList:value[0]}))
+        return pool.query(
+            "DELETE FROM clients WHERE id = UUID_TO_BIN(?)",
+            [id]
+        )
+    }).then((row) => {
         return { error: false, msg: "Client deleted successfully" };
-    }).catch(() => {
-        return { error: true, msg: "Query of deleteClient fail" };
+    }).catch((e) => {
+        return JSON.parse(e.message);
     })
 }

@@ -7,7 +7,7 @@ const deleteSalesController = async (req, res) => {
     const validUUID = await validateUUID(id)
     if (!validUUID) return res.status(400).json({ error: true, msg: "the id is invalid" })
     const data = await deleteSales(id);
-    if (data.error) return res.status(400).send(data)
+    if (data.error) return res.status(409).send(data)
     else return res.status(200).send(data)
 }
 

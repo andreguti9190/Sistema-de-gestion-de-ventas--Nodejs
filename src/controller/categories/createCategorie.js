@@ -13,7 +13,7 @@ const createCategorieController = async (req, res) => {
     if (!validCategorie) return res.status(400).json({ error: true, msg: "categorie name is invalid" })
 
     const data = await createCategorie(name)
-    if (data.error) return res.status(400).json({ error: true, msg: "categorie name exist" })
+    if (data.error) return res.status(409).json({ error: true, msg: "categorie name exist" })
     return res.status(200).json({ error: false, msg: "categorie was created sucessfully" })
 }
 

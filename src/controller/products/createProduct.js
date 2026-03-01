@@ -12,7 +12,7 @@ const createProductController = async (req, res) => {
     if (!validInformation) return res.status(400).json({ error: true, msg: "information format is incorrect" })
 
     const data = await createProduct(name, description, price, stock, categoriesID)
-    if (data.error) return res.status(400).json(data)
+    if (data.error) return res.status(409).json(data)
 
     else return res.status(200).json(data)
 }

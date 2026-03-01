@@ -15,7 +15,7 @@ const updateSalesController = async (req, res) => {
 
     if (!validSales) return res.status(400).json({ error: true, msg: "the data is invalid" })
     const data = await updateSales(id,productId, quantity)
-if(data.error) return res.status(400).json(data)
+if(data.error) return res.status(409).json(data)
     else return res.status(200).json(data)
 }
 

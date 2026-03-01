@@ -30,11 +30,20 @@ export function createCategorie(name) {
 export function deleteCategorie(id) {
     if (!id) return { error: true, msg: "the id field is missing" }
     return pool.query(
-        "DELETE FROM categories WHERE id = ?",
+        `SELECT BIN_TO_UUID(id) as id FROM products WHERE category_id = ?`,
         [id]
-    ).then((row) => {
+    ).then((value) => {
+        if (value[0].length != 0) {
+            throw new Error(JSON.stringify({ error: true, msg: "there is products with this category", productList: value[0] }))
+        } else {
+            return pool.query(
+                "DELETE FROM categories WHERE id = ?",
+                [id]
+            )
+        }
+    }).then((row) => {
         return { error: false, msg: "Categorie deleted successfully" };
-    }).catch(() => {
-        return { error: true, msg: "Query of deleteCategorie fail" };
+    }).catch((err) => {
+        return JSON.parse(err.message)
     })
 }

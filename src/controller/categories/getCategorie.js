@@ -8,7 +8,7 @@ function getCategorieController(req, res) {
             if(value.error) return res.status(400).json(value)
             return res.status(200).json(value)
         }).catch(err=>{
-            return res.status(400).json({error:true,msg:"database has a error"})
+            return res.status(409).json({error:true,msg:"database has a error"})
         })
 }
 

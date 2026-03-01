@@ -7,7 +7,7 @@ const deleteCategorieController = async (req, res) => {
     const validId = await validateId(id)
     if (!validId) return res.status(400).json({ error: true, msg: "id is invalid" })
     const data = await deleteCategorie(id)
-    if (data.error) return res.status(400).json(data)
+    if (data.error) return res.status(409).json(data)
     else return res.status(200).json(data)
 }
 

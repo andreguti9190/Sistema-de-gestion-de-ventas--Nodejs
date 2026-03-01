@@ -6,7 +6,7 @@ function getCategoriesController(req,res) {
     .then((value)=>{
         return res.status(200).json({error:false,categorieList:value})
     }).catch((err)=>{
-        return res.status(400).json(err)
+        return res.status(409).json(err)
     })
 }
 

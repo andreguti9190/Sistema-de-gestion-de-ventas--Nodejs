@@ -42,7 +42,7 @@ export function updateProduct(id, fields) {
         stock = IFNULL(?,stock),
         category_id = IFNULL(?,category_id) 
         WHERE id=UUID_TO_BIN(?)`,
-        [name, description, price, stock, categoryId ,id]
+        [name, description, price, stock, categoryId, id]
     ).then((row) => {
         return { error: false, msg: row }
     }).catch((err) => { return { error: true, msg: "Query of updateproducts fail" } })
@@ -50,11 +50,17 @@ export function updateProduct(id, fields) {
 export function deleteProduct(id) {
     if (!id) return { error: true, msg: "the id field is missing" }
     return pool.query(
-        "DELETE FROM products WHERE id = UUID_TO_BIN(?)",
+        `SELECT BIN_TO_UUID(id) as idSaleDetails, BIN_TO_UUID(sale_id) as idSale FROM sale_details WHERE product_id = UUID_TO_BIN(?)`,
         [id]
-    ).then((row) => {
+    ).then((value) => {
+        if(value[0].length != 0) throw new Error(JSON.stringify({error:true,msg:"there is sales with this product",salesList:value[0]}))
+        return pool.query(
+            "DELETE FROM products WHERE id = UUID_TO_BIN(?)",
+            [id]
+        )
+    }).then((row) => {
         return { error: false, msg: "Product deleted successfully" };
-    }).catch(() => {
-        return { error: true, msg: "Query of deleteproduct fail" };
+    }).catch((e) => {
+        return JSON.parse(e.message);
     })
 }

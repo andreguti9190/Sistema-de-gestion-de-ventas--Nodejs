@@ -14,7 +14,7 @@ const updateProductController = async (req, res) => {
     const validProduct = validateProductSoft(name, description, price, stock, categoryId)
     if (!validProduct) return res.status(400).json({ error: true, msg: "the data format is invalid" })
     const data = await updateProduct(id, { name, description, price, stock, categoryId })
-    if (data.error) return res.status(400).json(data)
+    if (data.error) return res.status(409).json(data)
     else return res.status(200).json({error:false,msg:"product modify sucessfully"})
 }
 

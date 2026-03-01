@@ -12,7 +12,7 @@ const createSalesController = async (req, res) => {
     const validOrden = await validateSales(clientId , ordenDetails)
     if (!validOrden) return res.status(400).json({ error: true, msg: "the data is invalid" })
     const data = await createSales(clientId, ordenDetails)
-    if (data.error) return res.status(400).json(data)
+    if (data.error) return res.status(409).json(data)
     return res.status(200).json(data)
 }
 
