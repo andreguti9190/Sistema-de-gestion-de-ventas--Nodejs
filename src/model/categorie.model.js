@@ -34,7 +34,7 @@ export function deleteCategorie(id) {
         [id]
     ).then((value) => {
         if (value[0].length != 0) {
-            throw new Error(JSON.stringify({ error: true, msg: "there is products with this category", productList: value[0] }))
+            throw new Error(JSON.stringify({ error: true, msg: "there are products with this category", productList: value[0] }))
         } else {
             return pool.query(
                 "DELETE FROM categories WHERE id = ?",

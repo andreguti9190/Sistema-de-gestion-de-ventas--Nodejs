@@ -53,7 +53,7 @@ export function deleteProduct(id) {
         `SELECT BIN_TO_UUID(id) as idSaleDetails, BIN_TO_UUID(sale_id) as idSale FROM sale_details WHERE product_id = UUID_TO_BIN(?)`,
         [id]
     ).then((value) => {
-        if(value[0].length != 0) throw new Error(JSON.stringify({error:true,msg:"there is sales with this product",salesList:value[0]}))
+        if(value[0].length != 0) throw new Error(JSON.stringify({error:true,msg:"there are sales with this product",salesList:value[0]}))
         return pool.query(
             "DELETE FROM products WHERE id = UUID_TO_BIN(?)",
             [id]

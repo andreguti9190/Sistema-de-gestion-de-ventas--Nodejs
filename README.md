@@ -52,12 +52,25 @@ En este caso va a pasar una lista de categorias
 }
 ```
 ### Método DELETE `/categories/:id`
-Este endpoint se encarga de eliminar una categoria en concreto pasando el id en la url
+Este endpoint se encarga de eliminar una categoria en concreto pasando el id en la url, en caso de haber un producto con esta categoria mandara un error con el id del producto
 ```json
 {
   "error": false,
   "msg": "Categorie deleted successfully"
 }
+```
+>[!CAUTION]
+>```json
+>// error
+>{
+>  "error": true,
+>  "msg": "there are products with this category",
+>  "productList": [
+>    {
+>      "id": "1373fe00-14e4-11f1-9fcd-2418c6c96a00"
+>    }
+>  ]
+>}
 ```
 ### Método POST `/products`
 Este endpoint se encargar de crear un product pasando el nombre con un minimo de 3 letras, una descripcion de mas de 10 caracteres, un stock, un precio y categoria(pasada como ID) en caso de no pasarlo, no respetando la regla o que exista mandar un error
@@ -132,7 +145,7 @@ Este endpoint se encarga de acutalizar un producto pasando los parametros que va
 }
 ```
 ### Método DELETE `/products/:id`
-Este endpoint se encarga de eliminar un producto en concreto pasando el id en la url
+Este endpoint se encarga de eliminar un producto en concreto pasando el id en la url, en caso de existir una orden de compra el producto mandara un error con el id del detalle de compra y el id de la compra
 ```json
 // Respuesta del método
 {
@@ -140,6 +153,19 @@ Este endpoint se encarga de eliminar un producto en concreto pasando el id en la
   "msg": "Product deleted successfully"
 }
 ```
+>[!CAUTION]
+>```json
+>{
+>  "error": true,
+>  "msg": "there are sales with this product",
+>  "salesList": [
+>    {
+>      "idSaleDetails": "4033e9a1-5858-44c9-b1d7-39c718933372",
+>      "idSale": "878d89a7-a1a1-4411-a359-1ad08965fb30"
+>    }
+>  ]
+>}
+>```
 ### Método POST `/clients`
 En este endpoint se encarga de crear los clientes los cuales son los que hacen las ordenes de compra
 ```json
@@ -194,13 +220,23 @@ Este endpoint se encarga de acutalizar un cliente pasando los parametros que va 
 }
 ```
 ### Método DELETE `/clients/:id`
-Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la url
+Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la url, en caso de tener una compra asociada a este cliente se mandar un error con el id de las compras que realizo
 ```json
 {
   "error": false,
   "msg": "Client deleted successfully"
 }
 ```
+>[!CAUTION]
+>```json
+>{
+>  "error": true,
+>  "msg": "there are sales with this client",
+>  "saleList": [{
+>      "idSale": "878d89a7-a1a1-4411-a359-1ad08965fb30"
+>    }]
+>}
+>```
 ### Método POST `/sales`
 Este enpoint se encarga de crear una orden de compra donde se ingresa los productos comprados y se disminuira en el stock, en caso de pedir mas que el stock mandara error
 ```json
@@ -398,11 +434,3 @@ Este endopint se encarga de eliminar la orden de compra pasando el id de la orde
   ]
 }
 ```
->[!CAUTION]
-> ```json
-> // Respuesta erronea
->{
->   "error": true,
->   "msg": "categorie name exist" // Aca va el mensaje de error
-> }
-> ```
