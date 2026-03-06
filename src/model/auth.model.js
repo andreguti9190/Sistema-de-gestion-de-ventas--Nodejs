@@ -1,13 +1,12 @@
 import crypto from "node:crypto"
 import { pool } from "./pool.js"
 
-export const signup = (name, email, password) => {
-    const UUID = crypto.randomUUID()
+export const signup = (id, name, email, password) => {
     return pool.query(
         `INSERT INTO users(id,name,email,password,role_id) VALUES (UUID_TO_BIN(?),?,?,?,2)`,
-        [UUID, name, email, password]
+        [id, name, email, password]
     ).then(data => {
-        return data
+        return true
     }).catch(err => {
         throw new Error("the email has been registered")
     })
@@ -26,7 +25,7 @@ export const getUser = async (email) => {
         [email]
     ).then(data => {
         data = data[0]
-        if(data.length==0) throw new Error("No exist user")
+        if (data.length == 0) throw new Error("No exist user")
         return data[0]
     }).catch(err => {
         console.log(err.message)

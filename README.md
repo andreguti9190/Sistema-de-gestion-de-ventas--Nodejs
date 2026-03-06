@@ -1,9 +1,34 @@
 # Sistema de gestion de ventas (NodeJS, Express)
 
 Una REST API desarrollada en Node.js y Express que permite gestionar órdenes de compra, incluyendo operaciones de creación, consulta, actualización y eliminación de registros en la base de datos.
+>[!NOTE] 
+> 🔒 Necesita ser autenticado 
 
 ## Enpoints
-### Método POST `/categories`
+### Método POST `/signup`
+Este en endpoint se encarga de registrar un usuario con el username, email y password, y te devuelve una accessToken si no esta registrado
+```json
+{
+  "username":"manuelito",
+  "email":"manuelito@gamer.com",
+  "password":"sosaltogroso123"
+}
+```
+
+### Método POST `/login`
+Este en endpoint se encarga de logear a un usuario con el username, email y password, y te devuelve una accessToken si esta correcto
+```json
+{
+  "username":"manuelito",
+  "email":"manuelito@gamer.com",
+  "password":"sosaltogroso123"
+}
+```
+
+### Método POST `/logout`
+Este en endpoint se encarga de deslogear a un usuario 
+
+### Método POST `/categories` 🔒
 Este endpoint se encargar de crear una categoria solamente pasando el nombre con un minimo de 3 letras, en caso de no pasarlo, no respetando la regla o que exista mandar un error
 ```json
 // Contenido del body
@@ -51,7 +76,7 @@ En este caso va a pasar una lista de categorias
   ]
 }
 ```
-### Método DELETE `/categories/:id`
+### Método DELETE `/categories/:id` 🔒
 Este endpoint se encarga de eliminar una categoria en concreto pasando el id en la url, en caso de haber un producto con esta categoria mandara un error con el id del producto
 ```json
 {
@@ -71,8 +96,8 @@ Este endpoint se encarga de eliminar una categoria en concreto pasando el id en 
 >    }
 >  ]
 >}
-```
-### Método POST `/products`
+>```
+### Método POST `/products` 🔒
 Este endpoint se encargar de crear un product pasando el nombre con un minimo de 3 letras, una descripcion de mas de 10 caracteres, un stock, un precio y categoria(pasada como ID) en caso de no pasarlo, no respetando la regla o que exista mandar un error
 ```json
 // Contenido del body
@@ -131,7 +156,7 @@ En este caso va a pasar una lista de productos
   }
 ]
 ```
-### Método PATCH `/products/:id`
+### Método PATCH `/products/:id` 🔒
 Este endpoint se encarga de acutalizar un producto pasando los parametros que va a actualizar
 ```json
 /* Contenido del body
@@ -144,7 +169,7 @@ Este endpoint se encarga de acutalizar un producto pasando los parametros que va
   "categoriesID":1
 }
 ```
-### Método DELETE `/products/:id`
+### Método DELETE `/products/:id` 🔒
 Este endpoint se encarga de eliminar un producto en concreto pasando el id en la url, en caso de existir una orden de compra el producto mandara un error con el id del detalle de compra y el id de la compra
 ```json
 // Respuesta del método
@@ -166,7 +191,7 @@ Este endpoint se encarga de eliminar un producto en concreto pasando el id en la
 >  ]
 >}
 >```
-### Método POST `/clients`
+### Método POST `/clients` 🔒
 En este endpoint se encarga de crear los clientes los cuales son los que hacen las ordenes de compra
 ```json
 // Contenido del body
@@ -175,9 +200,9 @@ En este endpoint se encarga de crear los clientes los cuales son los que hacen l
   "email":"markz@facebook.com"
 }
 ```
-### Método GET `/clients`
+### Método GET `/clients` 🔒
 Este endopoint se encarga de conseguir una lista de clientes o un cliente en concreto con toda su información dependiendo su url
-#### Caso `/clients/:id`
+#### Caso `/clients/:id` 🔒
 En este vas a conseguir un solo cliente solamente pasando el id en la url
 ```json
 {
@@ -190,7 +215,7 @@ En este vas a conseguir un solo cliente solamente pasando el id en la url
 }
 ```
 
-#### Caso `/clients`
+#### Caso `/clients` 🔒
 En este caso va a pasar una lista de clientes
 ```json
 {
@@ -209,7 +234,7 @@ En este caso va a pasar una lista de clientes
   ]
 }
 ```
-### Método PATCH `/clients/:id`
+### Método PATCH `/clients/:id` 🔒
 Este endpoint se encarga de acutalizar un cliente pasando los parametros que va a actualizar
 ```json
 /* Contenido del body
@@ -219,7 +244,7 @@ Este endpoint se encarga de acutalizar un cliente pasando los parametros que va 
   "email":"markzuck@facebook.com"
 }
 ```
-### Método DELETE `/clients/:id`
+### Método DELETE `/clients/:id` 🔒
 Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la url, en caso de tener una compra asociada a este cliente se mandar un error con el id de las compras que realizo
 ```json
 {
@@ -237,7 +262,7 @@ Este endpoint se encarga de eliminar un cliente en concreto pasando el id en la 
 >    }]
 >}
 >```
-### Método POST `/sales`
+### Método POST `/sales`🔒
 Este enpoint se encarga de crear una orden de compra donde se ingresa los productos comprados y se disminuira en el stock, en caso de pedir mas que el stock mandara error
 ```json
 { 
@@ -283,9 +308,9 @@ Este enpoint se encarga de crear una orden de compra donde se ingresa los produc
   }
 }
 ```
-### Método GET `/sales`
+### Método GET `/sales` 🔒
 Este endopoint se encarga de conseguir una lista de clientes o un cliente en concreto con toda su información dependiendo su url
-#### Caso `/sales/:id`
+#### Caso `/sales/:id` 🔒
 En este vas a conseguirla orden de compra con todos los productos pasando el id en la url
 ```json
 {
@@ -317,7 +342,7 @@ En este vas a conseguirla orden de compra con todos los productos pasando el id 
 }
 ```
 
-#### Caso `/sales`
+#### Caso `/sales` 🔒
 En este caso va a pasar todos los detalles de la ordenes de compra 
 ```json
 {
@@ -359,7 +384,7 @@ En este caso va a pasar todos los detalles de la ordenes de compra
   ]
 }
 ```
-### Método PATCH `/sales/:id`
+### Método PATCH `/sales/:id` 🔒
 Este endpoint se encarga de acutalizar la orden pasando el id del detalle de la compra y los parametros que va a actualizar
 ```json
 {
@@ -368,7 +393,7 @@ Este endpoint se encarga de acutalizar la orden pasando el id del detalle de la 
     "quantity":20
 }
 ```
-### Método DELETE `/sales/:id`
+### Método DELETE `/sales/:id` 🔒
 Este endopint se encarga de eliminar la orden de compra pasando el id de la orden
 
 - Ruta ejecutada `/sales/4e42fc03-edf3-4212-afb5-47e9ae8400a4
