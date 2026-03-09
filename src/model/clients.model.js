@@ -1,4 +1,4 @@
-import { pool, getUUID } from "./pool.js";
+import { pool } from "./pool.js";
 
 export function getClients() {
     return pool.query(
@@ -18,17 +18,15 @@ export function getClient(id) {
 }
 
 export function createClient(name, email) {
-    return getUUID()
-        .then(({ UUID }) => {
-            return pool.query(
-                "INSERT INTO clients (id,name,email) VALUES (UUID_TO_BIN(?),?,?)",
-                [UUID, name, email]
-            )
-        }).then(() => {
-            return { error: false, msg: "Client created sucessfully" }
-        }).catch((err) => {
-            return { error: true, msg: "Query of createClient fail" }
-        })
+    const UUID = crypto.randomUUID()
+    return pool.query(
+        "INSERT INTO clients (id,name,email) VALUES (UUID_TO_BIN(?),?,?)",
+        [UUID, name, email]
+    ).then(() => {
+        return { error: false, msg: "Client created sucessfully" }
+    }).catch((err) => {
+        return { error: true, msg: "Query of createClient fail" }
+    })
 }
 export function updateClient(id, fields) {
     const { name, email } = fields
@@ -48,7 +46,7 @@ export function deleteClient(id) {
         `SELECT BIN_TO_UUID(id) as idSale FROM sales WHERE clients_id = UUID_TO_BIN(?)`,
         [id]
     ).then((value) => {
-        if(value[0].length!=0) throw new Error(JSON.stringify({error:true,msg:"there are sales with this client",saleList:value[0]}))
+        if (value[0].length != 0) throw new Error(JSON.stringify({ error: true, msg: "there are sales with this client", saleList: value[0] }))
         return pool.query(
             "DELETE FROM clients WHERE id = UUID_TO_BIN(?)",
             [id]

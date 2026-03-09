@@ -1,4 +1,4 @@
-import { pool, getUUID } from "./pool.js";
+import { pool } from "./pool.js";
 
 export function getProducts() {
     return pool.query(
@@ -18,19 +18,17 @@ export function getProduct(id) {
 }
 
 export function createProduct(name, description, price, stock, categoryId) {
-    return getUUID()
-        .then(({ UUID }) => {
-            return pool.query(
-                `INSERT INTO products 
+    const UUID = crypto.randomUUID()
+    return pool.query(
+        `INSERT INTO products 
                 (id,name,description,price,stock,category_id) 
                 VALUES (UUID_TO_BIN(?),?,?,?,?,?)`,
-                [UUID, name, description, price, stock, categoryId]
-            )
-        }).then(() => {
-            return { error: false, msg: "Product created sucessfully" }
-        }).catch((err) => {
-            return { error: true, msg: "Query of createProduct fail" }
-        })
+        [UUID, name, description, price, stock, categoryId]
+    ).then(() => {
+        return { error: false, msg: "Product created sucessfully" }
+    }).catch((err) => {
+        return { error: true, msg: "Query of createProduct fail" }
+    })
 }
 export function updateProduct(id, fields) {
     const { name, description, price, stock, categoryId } = fields
@@ -53,7 +51,7 @@ export function deleteProduct(id) {
         `SELECT BIN_TO_UUID(id) as idSaleDetails, BIN_TO_UUID(sale_id) as idSale FROM sale_details WHERE product_id = UUID_TO_BIN(?)`,
         [id]
     ).then((value) => {
-        if(value[0].length != 0) throw new Error(JSON.stringify({error:true,msg:"there are sales with this product",salesList:value[0]}))
+        if (value[0].length != 0) throw new Error(JSON.stringify({ error: true, msg: "there are sales with this product", salesList: value[0] }))
         return pool.query(
             "DELETE FROM products WHERE id = UUID_TO_BIN(?)",
             [id]

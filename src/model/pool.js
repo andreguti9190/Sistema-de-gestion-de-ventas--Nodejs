@@ -8,11 +8,3 @@ export const pool = mysql.createPool({
     database: config.DATABASE_NAME,
     password: config.PASSWORD_DATABASE
 })
-
-export const getUUID = () => {
-    return pool.query("SELECT UUID() as UUID")
-        .then((row) => row[0][0]
-        ).catch((err) => {
-            throw new Error("Error Database")
-        })
-}
